@@ -14,7 +14,7 @@ const (
 	// EventEgressViolation — egress-policy / NetworkPolicy violation (anything
 	// leaving the allow-list is an alarm).
 	EventEgressViolation = "egress.violation"
-	// EventSigningEgress — a call to simpleSign / LVRTC, incl. ApiKey use.
+	// EventSigningEgress — a call to the signing tier / QTSP, incl. ApiKey use.
 	EventSigningEgress = "egress.signing"
 	// EventSecretAccess — Vault access, KMS key use, rotation, failed fetch.
 	EventSecretAccess = "secret.access"

@@ -7,8 +7,13 @@ access, privileged/admin actions, and **"first-awareness"** incident detections 
 **SIEM / central log management**, with high-precision synced timestamps so the NIS2
 **24-72-30** reporting clock is defensible.
 
-See the [Audit Design](../eSignature-Portal-Audit-Design.md) (§5 Regime C, §6 two breach
-clocks, §8) and [Services Catalog](../eSignature-Portal-Services-Catalog.md) §3.9.7.
+Design references (§-numbers in doc comments) point to the project's internal *Audit &
+Logging Design* and *Services & Libraries Catalog* documents.
+
+**Scope:** this library targets [Azugo](https://azugo.io) services — its entrypoints take
+`*azugo.Context` by design, and it is versioned in lockstep with the Azugo-based platform
+kit. `DataSubjects` values must be **pseudonymous internal identity references**, never
+national identifiers, names, or e-mail addresses.
 
 Events are the **frozen §8.1 `broker.Envelope`** tagged `security`, stamped with a ULID id,
 a high-precision occurrence time, and the request's correlation/trace ids. A pluggable
@@ -19,8 +24,8 @@ a high-precision occurrence time, and the request's correlation/trace ids. A plu
 | `LogSink` | structured log lines on the request logger → the log pipeline ships them to the SIEM (the common path) |
 | `BrokerSink` | the broker event stream → fans into the SIEM |
 
-Distinct from [`go-eidas-audit`](../go-eidas-audit) (hash-chained signing evidence) and
-[`go-gdpr-audit`](../go-gdpr-audit) (GDPR DB log) — different mechanism, different sink.
+Distinct from [`go-eidas-audit`](https://github.com/gmb-sig/go-eidas-audit) (hash-chained signing evidence) and
+[`go-gdpr-audit`](https://github.com/gmb-sig/go-gdpr-audit) (GDPR DB log) — different mechanism, different sink.
 
 ## Install
 
@@ -89,10 +94,13 @@ anchor, err := audit.FirstAwareness(ctx, secevents.Detection{
 | `PrivilegedAccess` | `access.privileged` | high |
 | `FirstAwareness` | `incident.first_awareness` | high |
 
-> **PII posture.** Security events are metadata only. The emitter strips free-text/content
-> attribute keys defensively, and the publisher strips bearer-token-shaped keys; pseudonymise
-> actors where possible. A privileged/break-glass access is *also* a GDPR access — emit the
-> Regime B record via [`go-gdpr-audit`](../go-gdpr-audit) too.
+> **PII posture.** Security events are metadata only — identifiers and **bounded
+> operational metadata** (string attribute values are truncated to `MaxAttrValueLen` (256)
+> runes, so `Reason`/`Detail`/`Summary` are ticket-style references, not narratives). The
+> emitter strips free-text/content attribute keys defensively, and the publisher strips
+> bearer-token-shaped keys; pseudonymise actors where possible. A privileged/break-glass
+> access is *also* a GDPR access — emit the Regime B record via
+> [`go-gdpr-audit`](https://github.com/gmb-sig/go-gdpr-audit) too.
 
 ## Develop
 

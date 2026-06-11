@@ -186,7 +186,8 @@ func (e *Emitter) EgressViolation(ctx *azugo.Context, eg Egress) error {
 	return e.Emit(ctx, ev)
 }
 
-// SigningEgress is an outbound call to the signing tier (simpleSign / LVRTC).
+// SigningEgress is an outbound call to the signing tier (the QTSP-facing
+// signing services).
 type SigningEgress struct {
 	Actor     broker.Actor
 	Target    string
@@ -368,6 +369,12 @@ func severityOf(ev *broker.Envelope) Severity {
 	return SeverityInfo
 }
 
+// MaxAttrValueLen is the maximum length (in runes) of a string attribute value;
+// longer values are truncated by sanitize. Reason/Detail/Summary/Change are
+// bounded operational metadata (a ticket-style reference), never narratives —
+// unbounded free text would bloat the SIEM and is an injection channel.
+const MaxAttrValueLen = 256
+
 // forbiddenAttrKeys are attribute-key fragments that would put PII or document
 // content into the security stream. Security events are metadata only.
 var forbiddenAttrKeys = []string{
@@ -375,23 +382,51 @@ var forbiddenAttrKeys = []string{
 	"note", "comment", "body", "payload", "email", "phone",
 }
 
-// sanitize drops free-text/content/PII attribute keys defensively. The publisher
-// additionally strips bearer-token-shaped keys (broker.Stamp).
+// sanitize drops free-text/content/PII attribute keys defensively and truncates
+// string values to MaxAttrValueLen runes. It never mutates the input map — a
+// sanitized copy is returned when anything must change, so caller-owned maps
+// stay intact. The publisher additionally strips bearer-token-shaped keys
+// (broker.Stamp).
 func sanitize(attrs map[string]any) map[string]any {
 	if len(attrs) == 0 {
 		return attrs
 	}
 
-	for k := range attrs {
-		lk := strings.ToLower(k)
-		for _, f := range forbiddenAttrKeys {
-			if strings.Contains(lk, f) {
-				delete(attrs, k)
+	var out map[string]any // allocated only when something changes
 
-				break
+	cow := func() {
+		if out == nil {
+			out = make(map[string]any, len(attrs))
+			for ck, cv := range attrs {
+				out[ck] = cv
 			}
 		}
 	}
 
-	return attrs
+	for k, v := range attrs {
+		lk := strings.ToLower(k)
+		for _, f := range forbiddenAttrKeys {
+			if strings.Contains(lk, f) {
+				cow()
+				delete(out, k)
+
+				break
+			}
+		}
+
+		if s, ok := v.(string); ok {
+			if r := []rune(s); len(r) > MaxAttrValueLen {
+				cow()
+				if _, kept := out[k]; kept {
+					out[k] = string(r[:MaxAttrValueLen])
+				}
+			}
+		}
+	}
+
+	if out == nil {
+		return attrs
+	}
+
+	return out
 }
