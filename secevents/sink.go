@@ -18,7 +18,7 @@ const logMessage = "security_event"
 
 // LogSink emits security events as structured log lines on the request logger.
 // The platform's log pipeline ships them to the SIEM / central log management —
-// the common Regime C path (Audit Design §8). Severity maps to the log level so
+// the common NIS2-audit path (Audit Design §8). Severity maps to the log level so
 // SIEM alerting and dashboards work without parsing the payload.
 type LogSink struct{}
 

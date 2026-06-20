@@ -1,6 +1,6 @@
 package secevents
 
-// Event types for Regime C security events (Audit Design §5, §7).
+// Event types for NIS2-audit security events (Audit Design §5, §7).
 const (
 	// EventAuthentication — user login / step-up / re-auth.
 	EventAuthentication = "auth.login"

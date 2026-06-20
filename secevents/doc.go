@@ -1,4 +1,4 @@
-// Package secevents is the Regime C (NIS2 security-operations) event emitter for
+// Package secevents is the NIS2-audit (NIS2 security-operations) event emitter for
 // the eSignature Portal. It gives every service one standard way to emit
 // structured security events — auth failures, authZ/IDOR denials, DPoP/proof
 // failures, egress/NetworkPolicy violations, secret/key access, privileged/admin
@@ -25,7 +25,7 @@
 // the envelope content-free. The emitter strips free-text/content attribute keys
 // defensively, and the publisher strips bearer-token-shaped keys.
 //
-// Regime A (signing evidence) and Regime B (GDPR access) are separate mechanisms
+// eIDAS-audit (signing evidence) and GDPR-audit (GDPR access) are separate mechanisms
 // with their own libraries (go-eidas-audit, go-gdpr-audit). A single action may be
 // security-relevant *and* a GDPR access (e.g. operator break-glass): the service
 // emits both, rather than overloading one event.

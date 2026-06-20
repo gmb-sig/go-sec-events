@@ -1,6 +1,6 @@
 # go-sec-events
 
-The **Regime C** (NIS2 security-operations) event emitter for the eSignature Portal. One
+The **NIS2-audit** (NIS2 security-operations) event emitter for the eSignature Portal. One
 standard way for **every service** to emit structured security events — auth failures,
 authZ/IDOR denials, DPoP/proof failures, egress/NetworkPolicy violations, secret/key
 access, privileged/admin actions, and **"first-awareness"** incident detections — to the
@@ -99,7 +99,7 @@ anchor, err := audit.FirstAwareness(ctx, secevents.Detection{
 > runes, so `Reason`/`Detail`/`Summary` are ticket-style references, not narratives). The
 > emitter strips free-text/content attribute keys defensively, and the publisher strips
 > bearer-token-shaped keys; pseudonymise actors where possible. A privileged/break-glass
-> access is *also* a GDPR access — emit the Regime B record via
+> access is *also* a GDPR access — emit the GDPR-audit record via
 > [`go-gdpr-audit`](https://github.com/gmb-sig/go-gdpr-audit) too.
 
 ## Develop
