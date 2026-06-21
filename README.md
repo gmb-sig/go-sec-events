@@ -1,21 +1,18 @@
 # go-sec-events
 
-The **Regime C** (NIS2 security-operations) event emitter for the eSignature Portal. One
+The **NIS2-audit** (NIS2 security-operations) event emitter for eIDAS signing services. One
 standard way for **every service** to emit structured security events — auth failures,
 authZ/IDOR denials, DPoP/proof failures, egress/NetworkPolicy violations, secret/key
 access, privileged/admin actions, and **"first-awareness"** incident detections — to the
 **SIEM / central log management**, with high-precision synced timestamps so the NIS2
 **24-72-30** reporting clock is defensible.
 
-Design references (§-numbers in doc comments) point to the project's internal *Audit &
-Logging Design* and *Services & Libraries Catalog* documents.
-
 **Scope:** this library targets [Azugo](https://azugo.io) services — its entrypoints take
 `*azugo.Context` by design, and it is versioned in lockstep with the Azugo-based platform
 kit. `DataSubjects` values must be **pseudonymous internal identity references**, never
 national identifiers, names, or e-mail addresses.
 
-Events are the **frozen §8.1 `broker.Envelope`** tagged `security`, stamped with a ULID id,
+Events are the **frozen `broker.Envelope`** tagged `security`, stamped with a ULID id,
 a high-precision occurrence time, and the request's correlation/trace ids. A pluggable
 **`Sink`** decides where they go:
 
@@ -99,7 +96,7 @@ anchor, err := audit.FirstAwareness(ctx, secevents.Detection{
 > runes, so `Reason`/`Detail`/`Summary` are ticket-style references, not narratives). The
 > emitter strips free-text/content attribute keys defensively, and the publisher strips
 > bearer-token-shaped keys; pseudonymise actors where possible. A privileged/break-glass
-> access is *also* a GDPR access — emit the Regime B record via
+> access is *also* a GDPR access — emit the GDPR-audit record via
 > [`go-gdpr-audit`](https://github.com/gmb-sig/go-gdpr-audit) too.
 
 ## Develop

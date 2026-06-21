@@ -7,7 +7,7 @@ import (
 
 	"azugo.io/azugo"
 
-	"github.com/gmb-sig/go-platform-kit/broker"
+	"github.com/gmb-lib/go-platform-kit/broker"
 )
 
 // Sink delivers a stamped security event to its destination (the SIEM via the
@@ -17,7 +17,7 @@ type Sink interface {
 	Emit(ctx *azugo.Context, ev *broker.Envelope) error
 }
 
-// Emitter emits Regime C security events through a Sink. Construct one per
+// Emitter emits NIS2-audit security events through a Sink. Construct one per
 // service; it is safe for concurrent use.
 type Emitter struct {
 	sink Sink
@@ -276,7 +276,7 @@ type Privileged struct {
 }
 
 // PrivilegedAccess records operator / break-glass access — elevated and always
-// high severity. The same action is a GDPR access; emit the Regime B record too.
+// high severity. The same action is a GDPR access; emit the GDPR-audit record too.
 func (e *Emitter) PrivilegedAccess(ctx *azugo.Context, p Privileged) error {
 	ev := security(EventPrivilegedAccess, SeverityHigh, broker.OpRead, broker.OutcomeSuccess)
 	ev.Actor = actor(p.Actor)

@@ -5,7 +5,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Configuration is the (small) Regime C emitter configuration, bound as a
+// Configuration is the (small) NIS2-audit emitter configuration, bound as a
 // sub-configuration of a consuming service. It only carries the broker topic used
 // when a BrokerSink is wired; the LogSink path needs no configuration. Most
 // services using the LogSink can skip this entirely.
