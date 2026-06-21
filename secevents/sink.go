@@ -6,7 +6,7 @@ import (
 	"azugo.io/azugo"
 	"go.uber.org/zap"
 
-	"github.com/gmb-sig/go-platform-kit/broker"
+	"github.com/gmb-lib/go-platform-kit/broker"
 )
 
 // DefaultTopic is the broker topic used by BrokerSink for security events.
@@ -18,7 +18,7 @@ const logMessage = "security_event"
 
 // LogSink emits security events as structured log lines on the request logger.
 // The platform's log pipeline ships them to the SIEM / central log management —
-// the common NIS2-audit path (Audit Design §8). Severity maps to the log level so
+// the common NIS2-audit path. Severity maps to the log level so
 // SIEM alerting and dashboards work without parsing the payload.
 type LogSink struct{}
 
@@ -84,7 +84,7 @@ func (s *LogSink) Emit(ctx *azugo.Context, ev *broker.Envelope) error {
 	return nil
 }
 
-// BrokerSink publishes security events onto the broker event stream (the §8
+// BrokerSink publishes security events onto the broker event stream (the
 // alternative path that fans into the SIEM). Use it where the SIEM ingests from
 // the broker rather than the log pipeline.
 type BrokerSink struct {

@@ -1,11 +1,11 @@
 // Package secevents is the NIS2-audit (NIS2 security-operations) event emitter for
-// the eSignature Portal. It gives every service one standard way to emit
+// eIDAS signing services. It gives every service one standard way to emit
 // structured security events — auth failures, authZ/IDOR denials, DPoP/proof
 // failures, egress/NetworkPolicy violations, secret/key access, privileged/admin
 // actions, and "first-awareness" incident detections — to the SIEM / central log
-// management (Audit Design §5, §8; Services Catalog §3.9.7).
+// management.
 //
-// Events are the frozen §8.1 broker.Envelope tagged broker.CategorySecurity,
+// Events are the frozen broker.Envelope tagged broker.CategorySecurity,
 // stamped with a ULID id, a high-precision occurrence time, and the request's
 // correlation/trace ids. A pluggable Sink decides where they go: a LogSink emits
 // them as structured log lines the platform's log pipeline ships to the SIEM (the

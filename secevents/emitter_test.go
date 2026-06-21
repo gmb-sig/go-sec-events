@@ -13,7 +13,7 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zaptest/observer"
 
-	"github.com/gmb-sig/go-platform-kit/broker"
+	"github.com/gmb-lib/go-platform-kit/broker"
 	"github.com/gmb-sig/go-sec-events/secevents"
 )
 

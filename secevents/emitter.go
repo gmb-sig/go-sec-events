@@ -7,7 +7,7 @@ import (
 
 	"azugo.io/azugo"
 
-	"github.com/gmb-sig/go-platform-kit/broker"
+	"github.com/gmb-lib/go-platform-kit/broker"
 )
 
 // Sink delivers a stamped security event to its destination (the SIEM via the

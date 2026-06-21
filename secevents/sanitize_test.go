@@ -7,7 +7,7 @@ import (
 	"azugo.io/azugo"
 	"github.com/go-quicktest/qt"
 
-	"github.com/gmb-sig/go-platform-kit/broker"
+	"github.com/gmb-lib/go-platform-kit/broker"
 	"github.com/gmb-sig/go-sec-events/secevents"
 )
 
