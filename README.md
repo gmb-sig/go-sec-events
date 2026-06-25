@@ -1,5 +1,11 @@
 # go-sec-events
 
+---
+
+Deprecated: moved to github.com/gmb-lib/go-sec-events. Update imports to the new path.
+
+---
+
 The **NIS2-audit** (NIS2 security-operations) event emitter for eIDAS signing services. One
 standard way for **every service** to emit structured security events — auth failures,
 authZ/IDOR denials, DPoP/proof failures, egress/NetworkPolicy violations, secret/key
